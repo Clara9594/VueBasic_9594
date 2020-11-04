@@ -14,7 +14,7 @@
     <div id="app">
         <div class="header text-center py-3">
             <h2 style="margin-top: 10%;">Tebak Angka dari 1 sampai dengan 10, ya!</h2>
-            <p>Kamu punya 3x kesempatan</p>
+            <p>Kamu punya {{i}}x kesempatan</p>
             <br><br>
         </div>
 
@@ -57,7 +57,7 @@
         el: "#app",
         data: {
             n: -1,
-            i: 0,
+            i: 3,
             path:'.',
             guess:'',
             clara:{
@@ -81,23 +81,23 @@
                     this.guess = '';
                     num=Math.ceil(num);
                     if (num>=1 && num<=10) {
-                    ++this.i;
+                    --this.i;
                     if (num == this.n) {
                         this.path = "win";
-                        document.getElementById("input").disabled = true;
+                        // document.getElementById("input").disabled = true;
                     }
                     else {
-                        if (this.i==3) {
+                        if (this.i==0) {
                         this.path = "lost";
                         }
                         else {
                         if (num>this.n) {
                             this.path = "greater";
-                            document.getElementById("input").disabled = true;
+                            // document.getElementById("input").disabled = true;
                             };
                         if (num<this.n) {
                             this.path ="less";
-                            document.getElementById("input").disabled = true;
+                            // document.getElementById("input").disabled = true;
                             };
                         }
                         };
@@ -114,7 +114,7 @@
                 reload: function() {
                     this.path = ".";
                     this.setRndNumber();
-                    this.i = 0;
+                    this.i = 3;
                 }      
                 }
             }
