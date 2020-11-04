@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAMES!!</title>
+
+    <script src="vue.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+
+<body>
+    <div id="app">
+        <div class="header text-center py-3">
+            <h2 style="margin-top: 10%;">Tebak Angka dari 1 sampai dengan 10, ya!</h2>
+            <p>Kamu punya 3x kesempatan</p>
+            <br><br>
+        </div>
+
+        <div v-if="path =='.'">
+            <input v-model="guess" type="text" name="input">
+            <button @click="checkInput()" class="btn btn-primary">Tebak</button>
+        </div>
+
+        <div v-if="path == 'greater'">
+            <input v-model="guess" id="input" type="text" name="input">
+            <p class="text-center py-3">Your number is greater!!</p>
+            <button @click="checkInput()" class="btn btn-primary">Tebak</button>
+        </div>
+            
+        <div v-if="path == 'less'">
+            <input v-model="guess" id="input" type="text" name="input">
+            <p class="text-center py-3">Your number is less!!</p> 
+            <button @click="checkInput()" class="btn btn-primary">Tebak</button>
+        </div>
+
+        <div v-if="path == 'win'">
+            <h3 class="text-center py-3">Selamat Kamu berhasil!!</h3>
+            <button  @click="reload()" type="button" class="btn btn-success">Main lagi</button>
+        </div>
+
+        <div v-if="path == 'lost'">
+            <p class="text-center py-3">Kesempatan mu habis, silakan coba lagi!</p>
+            <p class="text-center py-3">Angka yang dimaksud adalah {{n}}</p>
+            <button @click="reload" class="btn btn-primary">Coba lagi</button>    
+        </div>
+
+        <div class="footer text-center py-3">
+            <p class="text-center py-3"> {{clara.name}} | {{clara.npm}} | {{clara.cls}} </p>
+        </div>
+    </div>
+</body>
+  
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+            n: -1,
+            i: 0,
+            path:'.',
+            guess:'',
+            clara:{
+                name:'Clara Dilla Arista',
+                npm:'180709594',
+                cls:'Kelas D'
+            }
+        },
+        methods: {
+            setRndNumber: function(){
+                do{
+                    this.n= Math.ceil(Math.random()*10);
+                }while (this.n>10 || this.n<1);
+                console.log(this.n);
+            },
+            checkInput : function(input){
+                if(this.n == -1)
+                    this.setRndNumber();
+
+                    let num = parseInt(this.guess);
+                    this.guess = '';
+                    num=Math.ceil(num);
+                    if (num>=1 && num<=10) {
+                    ++this.i;
+                    if (num == this.n) {
+                        this.path = "win";
+                        document.getElementById("input").disabled = true;
+                    }
+                    else {
+                        if (this.i==3) {
+                        this.path = "lost";
+                        }
+                        else {
+                        if (num>this.n) {
+                            this.path = "greater";
+                            document.getElementById("input").disabled = true;
+                            };
+                        if (num<this.n) {
+                            this.path ="less";
+                            document.getElementById("input").disabled = true;
+                            };
+                        }
+                        };
+                    form.reset ();
+                    }
+                    else {
+                    alert('Angka antara 1 sampai dengan 10');
+                    form.reset ();
+                    }
+                },
+                // showNumberToGuess: function() {
+                //         alert('The number to guess is ' + this.n);
+                // },
+                reload: function() {
+                    this.path = ".";
+                    this.setRndNumber();
+                    this.i = 0;
+                }      
+                }
+            }
+            );
+app.setRndNumber();
+</script>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</html>
+
+<style>
+    .footer{
+        background-color: black;
+        color: white;
+        bottom:0;
+        width:100%;
+        height:100px;
+        position: absolute;
+    }
+
+    input{
+        margin-left: 43%;
+        margin-top: -10px;
+    }
+
+    button{
+        margin-left: 47.5%;
+        margin-top: 1%;
+    }
+</style>
