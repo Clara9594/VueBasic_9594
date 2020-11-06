@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My ToDo List</title>
+
+    <script src="vue.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+</head>
+
+<body>
+    
+    <div id="app">
+        <nav class="navbar fixed-top navbar-light bg-light">
+            <a class="navbar-brand">{{ judul }}</a>
+            <div class="addBtn">
+                <i class="fa fa-plus-circle" style="font-size:60px;color:rgb(240, 130, 28);" data-toggle="modal" 
+                data-target="#exampleModal" data-whatever="@getbootstrap"></i>
+            </div> 
+        </nav>
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Tambah To Do</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <!-- v-on:submit='tambah' -->
+                        <form>
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">To do:</label>
+                                <input type="text" class="form-control" id="recipient-name" v-model="tasks.todo">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-control">Prioritas</label>
+                                <select class="form-control" id="recipient-name" v-model="tasks.prioritas">
+                                    <option disabled value="">-Pilih satu-</option>
+                                    <option v-for="sts in status" v-bind:value="sts.value">{{sts.text}}</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="message-text" class="col-form-label">Catatan:</label>
+                                <textarea class="form-control" id="message-text" v-model="tasks.catatan"></textarea>
+                            </div>
+
+                            <div class="modal-footer">
+                                <!-- data-dismiss="modal" -->
+                                <button @click="reset" type="button" class="btn btn-secondary">Reset</button>
+                                <button @click="tambah" type="button" class="btn btn-primary" data-dismiss="modal">Simpan</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card" v-for='task in tasks' style="margin-top: 20px;">
+            <div class="card-header">
+                <span>
+                    <span v-if="task.prioritas == 'Penting'" class="text-danger">{{task.prioritas}}</span>
+                    <span v-else-if="task.prioritas == 'Biasa'" class="text-primary">{{task.prioritas}}</span>
+                    <span v-else-if="task.prioritas == 'Tidak Penting'" class="text-success">{{task.prioritas}}</span>
+                </span>
+                <button class="btn btn-danger btn-block" style="width: 70px; left: 95%; position: relative; margin-top: -1.5%;" v-on:click="hapus(task)">Hapus</button>
+            </div>
+
+            <div class="card-body">
+                <blockquote class="blockquote mb-0">
+                    <p>{{ task.todo }}</p>
+                    <footer class="blockquote-footer"><cite title="catatan">{{task.catatan}}</cite></footer>
+                </blockquote>
+            </div>
+        </div>
+
+        <footer class="footer-wrapper text-center py-3">
+            <p> {{clara.name}} | {{clara.npm}} | {{clara.cls}} </p>
+        </footer>
+    </div>
+</body>
+  
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+            judul :'ToDo List',
+            tasks:[
+               { todo: 'Kerjain Tugas', prioritas:'Penting', catatan:'Yang selalu menghantui'},
+               { todo: 'Tidur', prioritas:'Tidak Penting', catatan:'Asik' },
+               { todo: 'Drakor', prioritas:'Biasa', catatan:'Start Up, Record of Youth' },
+            ],
+            clara:{
+                name:'Clara Dilla Arista',
+                npm:'180709594',
+                cls:'Kelas D'
+            },
+            status:[
+                { text:'Penting' , value:'Penting' },
+                { text:'Biasa', value:'Biasa' },
+                { text:'Tidak Penting',value:'Tidak Penting' }
+            ],
+            pilihan: '',
+        },
+        methods:{
+            tambah: function(e) {
+                e.preventDefault();
+                this.tasks.push({
+                    todo: this.tasks.todo,
+                    prioritas: this.tasks.prioritas,
+                    catatan: this.tasks.catatan,
+                });
+                this.reset();
+            },
+            hapus: function(task){
+                this.tasks.splice(this.tasks.indexOf(task), 1)
+            },
+            reset(){
+                this.tasks.todo = "",
+                this.tasks.prioritas = "",
+                this.tasks.catatan = ""
+            },
+        }
+    });
+</script>
+
+</html>
+
+<style>
+    body{
+        background-color: #e4ecf2;
+    }
+
+    nav{
+        height: 18%;
+    }
+
+    .navbar-brand{
+        font-size: 30px;
+        font-family: cursive;
+        margin-left: 50px;
+        margin-top: -50px;
+    }
+
+    .footer-wrapper{
+        color:rgb(124, 124, 124);
+        width:100%;
+        height:90px;
+        position: relative;
+        bottom:-80px;
+        margin-top: 140px;
+    }
+
+    .addBtn{
+        margin-top: 100px;
+        margin-right: 60px;
+    }
+
+    .card{
+        width: 90%;
+        margin: 0 auto;
+        top: 180px;
+    }
+</style>
